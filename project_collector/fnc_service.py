@@ -1,25 +1,47 @@
 import requests
 from bs4 import BeautifulSoup
 from collect_dao import insert_news
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+import time
+
+options = Options()
+options.add_experimental_option("detach", True)
+# options.add_argument("headless")
+options.add_argument("disable-blink-features=AutomationControlled")
+options.add_experimental_option("useAutomationExtension", False)
+options.add_experimental_option("excludeSwitches",["enable-automation"])
 
 
-def collect_news(category: str):
-    page = 1
-    count = 1
+def collect_news():
+    count = 0
+    url = "https://news.daum.net/home"
+    driver = webdriver.Chrome(options=options)
+    driver.get(url)
+    time.sleep(1)
+    
+    
+    # 숙제: 중복 방지 체크
+    # 9개 기사 / 1page -> total 3page(27개 기사) -> 1번 수집(27개 기사 수집)
+    # 로직
+    #  다음 기사 수집 url과 url_list의 url을 비교
+    #  있으면 수집 멈춤
+    #  없으면 수집 계속
+    #  기사 1건 수집 완료 -> 해당 기사 주소를 url_list에 저장
     while True:
-        url = f"https://news.daum.net/breakingnews/{category}?page={page}"
-        result = requests.get(url)
-        doc = BeautifulSoup(result.text, "html.parser")
-        link_list = doc.select("ul.list_news2 a.link_txt")
-        if len(link_list) == 0:
-            break
+        # 9건의 기사 수집
+        doc = BeautifulSoup(driver.page_source, "html.parser")
+        link_list = doc.select("article.content-article ul.list_newsheadline2 a.item_newsheadline2")
         for link in link_list:
             print(f"{count} ===============================================")
-            count += 1
             get_news_info(link["href"])
-        page += 1
-        
-        
+            count += 1
+        # [새로운 뉴스] 버튼 클릭 이벤트
+        driver.find_element(By.XPATH, '//*[@id="58d84141-b8dd-413c-9500-447b39ec29b9"]/div[2]/a').click()
+        time.sleep(1)
+
 def get_news_info(url : str):
     result = requests.get(url)
     doc = BeautifulSoup(result.text, "html.parser")
@@ -45,7 +67,10 @@ def get_news_info(url : str):
     data = {
         "title": title,
         "writer": writer,
-        "content": content,
         "regdate": reg_date,
+        "content": content,
     }
-    insert_news(data)
+    # insert_news(data)
+    
+    
+collect_news()
