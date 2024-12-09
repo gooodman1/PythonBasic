@@ -1,16 +1,16 @@
 # 컬럼 데이터 타입 종류
-#  1, INT           : 정수형 숫자
-#  2. SMALLINT      : INT보다 작은 범위의 정수형 숫자
-#  3. DECIMAL(p,s)  : 고정소수점 실수형 숫자
-#  4. FLOAT         : 부동소수점 실수형 숫자
-#  5. CHAR(n)       : 고정길이 문자열
-#  6. VARCHAR(n)    : 가변길이 문자열
-#  7. DATE          : 날짜
-#  8. TIME          : 시간
-#  9. DATETIME      : 날짜 + 시간
+#  1. INT          : 정수형 숫자  
+#  2. SMALLINT     : INT보다 작은범위의 정수형 숫자
+#  3. DECIMAL(p,s) : 고정소수점 실수형 숫자  (3,2) 111.25
+#  4. FLOAT        : 부동소수점 실수형 숫자
+#  5. CHAR(n)      : 고정길이 문자열
+#  6. VARCHAR(n)   : 가변길이 문자열
+#  7. DATE         : 날짜
+#  8. TIME         : 시간
+#  9. DATETIME     : 날짜+시간
 
-# ORACLE DB에서 CHAR(byte), VARCHAR2(byte)
-# MySQL, MariaDB CHAR(n), VARCHAR(n)
+# * ORACLE DB에서 CHAR(byte), VARCHAR2(byte)
+# * MySQL, MariaDB에서 CHAR(n), VARCHAR(n)
 
 
 
@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS tbl_book(
     useyn CHAR(1) DEFAULT 'y'
 );
 SELECT * FROM tbl_book;
-
+ 
 
 # Book 정보 추가
 TRUNCATE TABLE tbl_book;
